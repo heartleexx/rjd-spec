@@ -1,0 +1,410 @@
+openapi: 3.0.3
+info:
+  title: Поезда
+  version: 1.0.11
+tags:
+  - name: trains
+paths:
+  /filials:
+    get:
+      tags:
+        - trains
+      summary: Получить список филиалов по дате
+      description: Получилось список филиалов по переданной дате (сегодня - если дата не передана)
+      parameters:
+        - name: date
+          in: query
+          description: Дата для просмотра филиалов
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ответ получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filial'
+  /filials/{filialId}/trips:
+    get:
+      tags:
+        - trains
+      summary: Получить список рейсов по id филиала
+      description: Получилось список по id филиала и переданной дате (сегодня - если дата не передана)
+      parameters:
+        - name: filialId
+          in: path
+          description: id филиала
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: Дата
+          required: false
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: Название рейса
+          required: false
+          schema:
+            type: string
+        - name: time
+          in: query
+          description: Время рейса
+          required: false
+          schema:
+            type: string
+        - name: filial
+          in: query
+          description: Филиал
+          required: false
+          schema:
+            type: string
+        - name: depo
+          in: query
+          description: Депо
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ответ получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'
+  /trips/{tripId}/carriages/{carriageId}:
+    get:
+      tags:
+        - trains
+      summary: Получить основную инф-ию о рейсе и вагоне
+      parameters:
+        - name: tripId
+          in: path
+          description: id рейса
+          required: true
+          schema:
+            type: string
+        - name: carriageId
+          in: path
+          description: id вагона
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ответ получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarriageMainInfo'
+  /trips/{tripId}/carriages/{carriageId}/skdu:
+    get:
+      tags:
+        - trains
+      summary: Получить инфо для СКДУ
+      parameters:
+        - name: tripId
+          in: path
+          description: id рейса
+          required: true
+          schema:
+            type: string
+        - name: carriageId
+          in: path
+          description: id вагона
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ответ получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarriageSkduInfo'
+  /trips/{tripId}/carriages/{carriageId}/skdu/{section}:
+    get:
+      tags:
+        - trains
+      summary: Получить инфо для СКДУ
+      parameters:
+        - name: tripId
+          in: path
+          description: id рейса
+          required: true
+          schema:
+            type: string
+        - name: carriageId
+          in: path
+          description: id вагона
+          required: true
+          schema:
+            type: string
+        - name: section
+          in: path
+          description: alias раздела данных
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ответ получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarriageSkduInfoSection'
+  /trips/{tripId}/carriages/{carriageId}/connection:
+    get:
+      tags:
+        - trains
+      summary: Получить инфо для информационной магистрали
+      parameters:
+        - name: tripId
+          in: path
+          description: id рейса
+          required: true
+          schema:
+            type: string
+        - name: carriageId
+          in: path
+          description: id вагона
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ответ получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarriageConnectionInfo'
+  /trips/{tripId}/carriages/{carriageId}/registrar:
+    get:
+      tags:
+        - trains
+      summary: Получить инфо о регистраторе
+      parameters:
+        - name: tripId
+          in: path
+          description: id рейса
+          required: true
+          schema:
+            type: string
+        - name: carriageId
+          in: path
+          description: id вагона
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ответ получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarriageRegistrarInfo'
+components:
+  schemas:
+    Filial:
+      type: object
+      description: 'Филиал'
+      properties:
+        id:
+          type: integer
+          example: 10
+        name:
+          type: string
+        trainsOnWay:
+          type: integer
+          description: Поезда в пути
+          example: 10
+        trainsTroubled:
+          type: integer
+          description: Поезда с проблемами
+          example: 10
+        trainsTopred:
+          type: integer
+          description: Поезда в ТОпред
+          example: 10
+        serviceLevel:
+          type: integer
+          description: Показатель уровня сервиса
+          example: 10
+    Trip:
+      type: object
+      description: 'Рейс'
+      properties:
+        id:
+          type: integer
+          example: 10
+        name:
+          type: string
+          example: '351Й (ХАБАРОВСК)'
+        departureTime:
+          type: string
+          description: 'Время отправления'
+        arrivalTime:
+          type: string
+          description: 'Время прибытия'
+        serviceLevel:
+          type: integer
+          description: 'Показатель уровня сервиса'
+          example: 10
+        carriages:
+          type: array
+          description: 'Вагоны в составе'
+          items:
+            $ref: '#/components/schemas/Carriage'
+    Carriage:
+      type: object
+      description: 'Вагон в составе рейса'
+      properties:
+        id:
+          type: integer
+          example: 10
+        name:
+          type: string
+          description: 'Название (номер) вагона'
+          example: '012-34567'
+        date:
+          type: string
+          description: 'Дата'
+        forStaff:
+          type: boolean
+        type:
+          type: string
+          example: 'ЗАК'
+        systems:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                enum:
+                  - СКДУ
+                  - ИМ
+                  - СВНР
+                  - СКБ и СПП
+              status:
+                type: string
+                enum:
+                  - ok
+                  - problem
+                  - no_info
+    CarriageMainInfo:
+      type: object
+      description: 'Основная информация о рейсе и вагоне'
+      properties:
+        trip:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 10
+            name:
+              type: string
+              example: '351Й (ХАБАРОВСК)'
+            carriagesNumber:
+              type: integer
+              description: 'Количество вагонов в составе рейса'
+        carriageNumber:
+          type: integer
+          description: 'Номер вагона в составе рейса'
+          example: 1
+    CarriageSkduInfo:
+      type: object
+      description: 'Информация о вагоне для СКДУ'
+      properties:
+        sections:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                description: ключ (alias) раздела данных
+              name:
+                type: string
+                description: название раздела данных
+    CarriageSkduInfoSection:
+      type: object
+      description: 'Информация из раздела в СКДУ'
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: название
+              value:
+                type: string
+                description: значение
+    CarriageConnectionInfo:
+      type: object
+      description: 'Информация о коммутаторе для ИМ'
+      properties:
+        model:
+          type: string
+          description: 'Модель коммутатора'
+        uptime:
+          type: integer
+        ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarriagePort'
+        accessPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarriageAccessPoint'
+    CarriagePort:
+      type: object
+      description: 'Порт на коммутаторе'
+      properties:
+        address:
+          type: string
+          description: 'Адрес подключения'
+        status:
+          type: string
+          enum:
+            - ok
+            - no_connection
+            - not_plugged
+        speed:
+          type: integer
+          example: 100
+    CarriageAccessPoint:
+      type: object
+      description: 'Точка доступа на коммутаторе'
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+          description: 'Адрес подключения'
+        connectionsNumber:
+          type: integer
+          example: 2
+        uptime:
+          type: integer
+        status:
+          type: string
+          enum:
+            - ok
+            - problem
+            - no_td
+    CarriageRegistrarInfo:
+      type: object
+      description: 'Информация о регистраторе для СВНР'
+      properties:
+        model:
+          type: string
+          description: 'Модель регистратора'
+        status:
+          type: string
+          description: 'Состояние регистратора'
