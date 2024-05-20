@@ -24,7 +24,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Filial'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Filial'
         default:
           description: Ошибка
           content:
@@ -80,7 +82,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Trip'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trip'
         default:
           description: Ошибка
           content:
