@@ -25,6 +25,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Filial'
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /filials/{filialId}/trips:
     get:
       tags:
@@ -75,6 +81,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trip'
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /trips/{tripId}/carriages/{carriageId}:
     get:
       tags:
@@ -100,6 +112,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CarriageMainInfo'
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /trips/{tripId}/carriages/{carriageId}/skdu:
     get:
       tags:
@@ -125,6 +143,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CarriageSkduInfo'
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /trips/{tripId}/carriages/{carriageId}/skdu/{section}:
     get:
       tags:
@@ -156,6 +180,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CarriageSkduInfoSection'
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /trips/{tripId}/carriages/{carriageId}/connection:
     get:
       tags:
@@ -181,6 +211,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CarriageConnectionInfo'
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /trips/{tripId}/carriages/{carriageId}/registrar:
     get:
       tags:
@@ -206,6 +242,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CarriageRegistrarInfo'
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Filial:
@@ -408,3 +450,10 @@ components:
         status:
           type: string
           description: 'Состояние регистратора'
+    Error:
+      type: object
+      description: 'Информация об ошибке'
+      properties:
+        message:
+          type: string
+          description: 'Текст ошибки'
